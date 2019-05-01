@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Search Results</legend>
+                <div class="form-group">
+                    {{ form.book_name.label(class="form-control-label") }}
+
+                    {% if form.book_name.errors %}
+                        {{ form.book_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.book_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.book_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.max_price.label(class="form-control-label") }}
+
+                    {% if form.max_price.errors %}
+                        {{ form.max_price(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.max_price.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.max_price(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+    {% for book in books.items %}
+        <article class="media content-section">
+            <div class="media">
+                <img class="rounded-circle article-img"
+                     src="{{ url_for('static', filename='profile_pics/' + book.author.profilePicture) }}">
+            </div>
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2"
+                       href="{{ url_for('users.profile', username=book.author.username) }}">{{ book.author.username }}</a>
+                    <small class="text-muted">{{ book.datePosted.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <h2><a class="article-title" href="{{ url_for('posts.post', post_id=book.id) }}">{{ book.title }}</a>
+                </h2>
+                <div class="content-section">
+                    <img class="article-img" src="{{ url_for('static', filename='book_pics/' + book.coverPicture) }}">
+                    <p class="text-muted">{{ book.content }}</p>
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+    {% for page_num in books.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if books.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+{% endblock %}
