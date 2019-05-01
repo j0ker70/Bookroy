@@ -41,6 +41,7 @@
                         <a class="nav-item nav-link" href="{{ url_for('main.search') }}">
                             <img class="rounded-circle" height="25" width="25" src="{{ url_for('static', filename='other_pics/search.png') }}">
                         </a>
+                        <a class="nav-item nav-link" href="{{ url_for('main.messages') }}">Message</a>
                         <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">Add Book</a>
                         <a class="nav-item nav-link"
                            href="{{ url_for('users.profile', username=current_user.username) }}">{{ current_user.username }}</a>

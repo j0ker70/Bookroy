@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Messages</h1>
+    <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span>Newer messages
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    Older messages<span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% for message in messages %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img"
+                 src="{{ url_for('static', filename='profile_pics/' + User.query.get(message.sender_id).profilePicture) }}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2"
+                       href="{{ url_for('users.profile', username=User.query.get(message.sender_id).username) }}">{{ User.query.get(message.sender_id).username }}</a>
+                </div>
+                <div class="row m-1">
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1"
+                       href={{ url_for('main.send_message', recipient=User.query.get(message.sender_id).username) }}>Reply</a>
+                </div>
+                <div class="content-section">
+                    <p class="text-muted">{{ message.body }}</p>
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock %}
