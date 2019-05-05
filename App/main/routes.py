@@ -42,6 +42,9 @@ def search():
             posts = Post.query.filter(Post.price <= form.max_price.data).\
                 order_by(Post.datePosted.desc()).\
                 paginate(per_page=5, page=page)
+        print(Post.query.all())
+    elif request.method == 'GET':
+        form.max_price.data = 10000
     return render_template('search.html', title='Search', form=form, books=posts)
 
 
